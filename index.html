@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Партия «Яблоко» | Выборы в ЗакС 11-го созыва</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* ШРИФТ GILROY */
+    @font-face { font-family: 'Gilroy'; src: local('Gilroy-Regular'), local('Gilroy'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Gilroy'; src: local('Gilroy-Medium'); font-weight: 500; font-display: swap; }
+    @font-face { font-family: 'Gilroy'; src: local('Gilroy-SemiBold'); font-weight: 600; font-display: swap; }
+    @font-face { font-family: 'Gilroy'; src: local('Gilroy-Bold'); font-weight: 700; font-display: swap; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+        font-family: 'Gilroy', 'Inter', Arial, sans-serif;
+        background-color: #fafafa;
+        color: #333;
+        line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* ВЕРХНЯЯ СЕРАЯ ПОЛОСА */
+    .top-bar { background-color: #2b2b2b; padding: 8px 0; font-size: 12px; color: #999; }
+    .top-bar-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+    .top-left { display: flex; align-items: center; gap: 10px; }
+    .top-left select { background: transparent; color: #ccc; border: 1px solid #444; padding: 4px 8px; font-family: inherit; font-size: 12px; outline: none; }
+    .top-right { display: flex; align-items: center; gap: 20px; }
+    .top-right a { color: #999; text-decoration: none; }
+    .top-right a:hover { color: #fff; }
+    .search-input { background: #444; border: none; color: #fff; padding: 4px 10px; font-size: 12px; width: 180px; outline: none; font-family: inherit; }
+
+    /* ЧЕРНАЯ ШАПКА */
+    .main-header { background-color: #000000; border-bottom: 3px solid #04A902; }
+    .header-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 60px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { color: #ffffff; font-size: 20px; font-weight: 700; text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .logo span { color: #04A902; }
+    .nav-menu { display: flex; align-items: center; gap: 25px; height: 100%; }
+    .nav-menu a.nav-item { color: #cccccc; text-decoration: none; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.2s; height: 100%; display: flex; align-items: center; cursor: pointer; font-family: inherit; }
+    .nav-menu a.nav-item:hover, .nav-menu a.nav-item.active { color: #04A902; }
+    .btn-green { background-color: #04A902; color: #fff !important; padding: 0 25px; display: flex; align-items: center; height: 60px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; transition: background 0.2s; }
+    .btn-green:hover { background-color: #038a02; }
+
+    /* ОСНОВНОЙ КОНТЕНТ */
+    .main-content { flex: 1; max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; }
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* БОРДОВАЯ ПЛАШКА */
+    .section-header { background-color: #8B2B5B; color: #ffffff; padding: 15px 20px; font-size: 18px; font-weight: 500; margin-bottom: 25px; }
+
+    /* ВКЛАДКИ НОВОСТЕЙ */
+    .tabs { display: flex; gap: 30px; border-bottom: 1px solid #e0e0e0; margin-bottom: 30px; }
+    .tab { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; padding-bottom: 12px; cursor: pointer; border-bottom: 2px solid transparent; letter-spacing: 0.5px; transition: 0.2s; }
+    .tab.active, .tab:hover { color: #04A902; border-bottom-color: #04A902; }
+
+    /* СЕТКА НОВОСТЕЙ */
+    .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+    .news-card { border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; background: #fff; display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; }
+    .news-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .card-image { height: 180px; background-color: #04A902; position: relative; overflow: hidden; }
+    .card-image svg { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+    .card-tag { position: absolute; top: 15px; left: 15px; background-color: #8B2B5B; color: #fff; font-size: 10px; font-weight: 600; padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 2px; z-index: 2; }
+    .card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+    .card-date { font-size: 12px; color: #888; margin-bottom: 10px; }
+    .card-title { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 10px; line-height: 1.4; }
+    .card-text { font-size: 13px; color: #666; line-height: 1.5; }
+
+    /* КАНДИДАТЫ И ПОИСК */
+    .search-box { width: 100%; max-width: 400px; padding: 12px 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; margin-bottom: 20px; font-family: inherit; }
+    .search-box:focus { outline: none; border-color: #04A902; }
+    .cand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .cand-item { border: 1px solid #e0e0e0; padding: 15px 20px; font-size: 14px; font-weight: 600; color: #111; border-left: 4px solid #04A902; background: #fff; }
+
+    /* КАРТА */
+    .map-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    .map-svg-container { border: 1px solid #e0e0e0; padding: 15px; background: #fff; }
+    .district { fill: #e0e0e0; stroke: #fff; stroke-width: 2px; transition: fill 0.3s; cursor: pointer; }
+    .district:hover { fill: #a5d6a7; }
+    .district.active { fill: #04A902; }
+    .map-info { border: 1px solid #e0e0e0; padding: 25px; background: #fff; }
+    .map-info h3 { font-size: 18px; margin-bottom: 15px; color: #8B2B5B; font-weight: 700; }
+    .map-addr { background: #f0f8f0; padding: 10px; border-left: 3px solid #04A902; margin-bottom: 15px; font-size: 13px; color: #111;}
+
+    /* ТЕКСТОВЫЕ БЛОКИ */
+    .text-card { border: 1px solid #e0e0e0; padding: 35px; background: #fff; border-radius: 4px; font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 20px; }
+    .text-card h3 { margin-bottom: 15px; color: #111; font-size: 20px; font-weight: 700;}
+    .text-card p { margin-bottom: 15px; }
+    .btn-doc { display: inline-block; background: #04A902; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: 600; border-radius: 4px; margin-top: 15px; font-family: inherit; }
+    .btn-doc:hover { background: #038a02; }
+
+    /* ИНФОГРАФИКА ИТОГОВ */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+    .info-box { background: #fff; border: 1px solid #e0e0e0; padding: 30px; text-align: center; }
+    .info-box .num { font-size: 64px; font-weight: 800; line-height: 1; margin-bottom: 10px; }
+    .info-box.green .num { color: #04A902; }
+    .info-box.red .num { color: #cc0000; }
+    .info-box .label { font-size: 14px; font-weight: 600; color: #555; }
+
+    /* ПРОГРЕСС-БАР И ПАСХАЛКА */
+    .progress-container {
+        position: relative;
+        margin-top: 20px;
+        cursor: crosshair; /* Курсор в виде прицела, чтобы было понятно, что можно водить */
+    }
+    .progress-bar { 
+        height: 12px; 
+        background: #eee; 
+        border-radius: 6px; 
+        display: flex; 
+        overflow: hidden; 
+    }
+    .progress-green { background: #04A902; height: 100%; }
+    .progress-red { background: #cc0000; height: 100%; }
+
+    /* ВЕЛОСИПЕД, СЛЕДУЮЩИЙ ЗА КУРСОРОМ */
+    .bike-egg {
+        position: absolute;
+        top: -26px; /* Поднимаем над полосой */
+        transform: translateX(-50%); /* Центрируем по курсору */
+        font-size: 24px;
+        opacity: 0;
+        pointer-events: none; /* Чтобы не мешал наведению мыши */
+        transition: opacity 0.2s;
+        z-index: 10;
+        user-select: none;
+    }
+    .progress-container:hover .bike-egg {
+        opacity: 1;
+    }
+
+    /* ФОРМА */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+    .btn-submit { background: #04A902; color: #fff; border: none; padding: 12px 24px; font-weight: 600; border-radius: 4px; cursor: pointer; font-family: inherit; }
+    .btn-submit:hover { background: #038a02; }
+
+    /* ПОДВАЛ */
+    footer { background: #111; color: #888; padding: 40px 20px; font-size: 13px; border-top: 3px solid #04A902; }
+    .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
+    .footer-logo { color: #fff; font-size: 24px; font-weight: 700; margin-bottom: 15px; display: block; }
+    .footer-logo span { color: #04A902; }
+    .footer-text { line-height: 1.6; }
+    .footer-col h4 { color: #fff; margin-bottom: 15px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a { color: #888; text-decoration: none; transition: 0.2s; cursor: pointer;}
+    .footer-col a:hover { color: #04A902; }
+    .footer-bottom { text-align: center; padding-top: 30px; margin-top: 30px; border-top: 1px solid #333; font-size: 12px; }
+
+    /* АДАПТИВ */
+    @media (max-width: 950px) {
+        .news-grid, .cand-grid, .info-grid { grid-template-columns: repeat(2, 1fr); }
+        .map-wrapper, .footer-container { grid-template-columns: 1fr; }
+        .nav-menu { display: none; } 
+    }
+    @media (max-width: 600px) {
+        .news-grid, .cand-grid, .info-grid { grid-template-columns: 1fr; }
+        .top-bar-container { flex-direction: column; gap: 10px; }
+    }
+</style>
+</head>
+<body>
+
+    <!-- ВЕРХНЯЯ СЕРАЯ ПОЛОСА -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-left">
+                <span>Ваш район:</span>
+                <select>
+                    <option>— Выберите район —</option>
+                    <option>Центральный</option>
+                    <option>Приморский</option>
+                    <option>Невский</option>
+                    <option>Адмиралтейский</option>
+                </select>
+            </div>
+            <div class="top-right">
+                <input type="text" class="search-input" placeholder="Поиск по сайту...">
+                <a href="#">Связаться с нами</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЧЕРНАЯ ШАПКА -->
+    <header class="main-header">
+        <div class="header-container">
+            <a class="logo" onclick="showPage('news', this)">ЯБЛОКО <span>СПБ</span></a>
+            <nav class="nav-menu">
+                <a class="nav-item active" onclick="showPage('news', this)">Новости</a>
+                <a class="nav-item" onclick="showPage('map', this)">Карта</a>
+                <a class="nav-item" onclick="showPage('results', this)">Итоги</a>
+                <a class="nav-item" onclick="showPage('program', this)">Программа</a>
+                <a class="nav-item" onclick="showPage('candidates', this)">Кандидаты</a>
+                <a class="nav-item" onclick="showPage('ideas', this)">Идеи</a>
+                <a href="https://discord.gg/naTcuBxSAz" target="_blank" class="btn-green">В команду</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="main-content">
+        
+        <!-- СТРАНИЦА: НОВОСТИ -->
+        <div id="news" class="page active">
+            <div class="section-header">Новости кампании</div>
+
+            <div class="tabs" id="newsTabs">
+                <div class="tab active" data-cat="all">Все</div>
+                <div class="tab" data-cat="main">Главные</div>
+                <div class="tab" data-cat="district">Районные</div>
+                <div class="tab" data-cat="blog">Блоги</div>
+            </div>
+
+            <div class="news-grid" id="newsGrid">
+                <div class="news-card" data-cat="main">
+                    <div class="card-image">
+                        <span class="card-tag">Главное</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,100 Q100,50 200,100 T400,80" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/><path d="M0,140 Q150,80 300,120 T400,100" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">15 сентября 2026</div>
+                        <div class="card-title">Федеральный успех: опыт кампании в Госдуму-2026 переносим на Петербург</div>
+                        <div class="card-text">На выборах в Госдуму партия «Яблоко» показала историю борьбы за мир, социальную справедливость и права граждан. В ЗакС мы идем с этим же знаменем.</div>
+                    </div>
+                </div>
+
+                <div class="news-card" data-cat="main">
+                    <div class="card-image">
+                        <span class="card-tag">Главное</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,80 Q150,180 300,80 T400,140" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">10 сентября 2026</div>
+                        <div class="card-title">9 законопроектов отклонено Губернатором Егоровым Т.Д.</div>
+                        <div class="card-text">Фракция «Яблоко» вносила законы для улучшения жизни горожан (о ЖКХ, транспорте, экологии), но они были заблокированы.</div>
+                    </div>
+                </div>
+
+                <div class="news-card" data-cat="district">
+                    <div class="card-image">
+                        <span class="card-tag">Адмиралтейский</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,120 Q200,20 400,100" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">20 октября 2026</div>
+                        <div class="card-title">Региональное отделение в Санкт-Петербурге подало документы в СПИК</div>
+                        <div class="card-text">Руководство Санкт-Петербургского Регионального отделения подало документы для регистрации партийного списка на предстоящих региональных парламентских выборов.</div>
+                    </div>
+                </div>
+
+                <div class="news-card" data-cat="blog">
+                    <div class="card-image">
+                        <span class="card-tag">Блог</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,60 Q150,160 300,60 T400,120" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">5 октября 2026</div>
+                        <div class="card-title">Почему мы называем себя «Яблоком»</div>
+                        <div class="card-text">Наш бренд — это не просто логотип. Это история независимой демократической партии, которая десятилетиями защищает граждан.</div>
+                    </div>
+                </div>
+
+                <div class="news-card" data-cat="district">
+                    <div class="card-image">
+                        <span class="card-tag">Центральный</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,140 Q150,40 300,140 T400,80" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">23 октября 2026</div>
+                        <div class="card-title">Городской штаб начал приём обращений</div>
+                        <div class="card-text">Юристы партии готовы бесплатно консультировать жителей по вопросам ЖКХ и градостроительства.</div>
+                    </div>
+                </div>
+
+                <div class="news-card" data-cat="blog">
+                    <div class="card-image">
+                        <span class="card-tag">Блог</span>
+                        <svg viewBox="0 0 400 200" preserveAspectRatio="none"><path d="M0,100 Q200,180 400,60" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-date">25 августа 2026</div>
+                        <div class="card-title">Без лишних слов. В интересах петербуржцев.</div>
+                        <div class="card-text">Наш девиз на эти выборы. Хватит обещаний — нужны реальные законы для петербуржцев.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА: КАРТА -->
+        <div id="map" class="page">
+            <div class="section-header">Кандидаты по районам</div>
+            <div class="map-wrapper">
+                <div class="map-svg-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1850" width="100%" height="auto">
+                      <g stroke="#ffffff" stroke-width="2" stroke-linejoin="round">
+                        <polygon class="district" id="dist1" points="28,183 120,88 165,65 250,100 275,75 345,40 430,30 515,35 580,95 660,165 760,200 850,255 900,300 960,345 1090,350 1155,372 1150,400 1070,410 1000,430 975,462 1010,495 1045,535 1075,545 1070,600 1085,640 990,665 990,730 940,725 890,700 880,680 840,640 820,615 790,590 780,555 770,510 790,470 790,420 770,350 740,305 700,285 600,235 480,200 330,180 235,165 175,200 90,215 50,232"/>
+                        <polygon class="district" id="dist2" points="1075,590 1160,560 1200,590 1275,545 1305,590 1345,740 1355,780 1345,805 1295,797 1200,805 1140,775 1100,780 1000,745 960,740 990,665 1050,645 1085,640"/>
+                        <polygon class="district" id="dist3" points="1145,865 1185,850 1285,875 1300,903 1250,935 1245,960 1215,950 1180,930 1145,905 1155,880"/>
+                        <polygon class="district" id="dist4" points="1330,905 1385,885 1440,870 1465,880 1455,955 1465,985 1405,1000 1365,965 1335,925"/>
+                        <polygon class="district" id="dist5" points="1345,1010 1365,1010 1380,1070 1385,1100 1415,1210 1435,1282 1385,1295 1350,1325 1350,1400 1365,1420 1330,1495 1255,1445 1275,1395 1300,1355 1290,1325 1265,1330 1195,1315 1165,1300 1180,1290 1200,1270 1230,1250 1285,1215 1300,1160 1305,1090 1310,1050 1340,1050"/>
+                        <polygon class="district" id="dist6" points="360,955 385,935 540,955 580,990 690,1050 780,1085 840,1105 900,1150 1015,1148 1005,1180 1005,1230 975,1225 985,1285 935,1280 930,1240 900,1230 860,1240 790,1245 780,1235 710,1180 690,1160 660,1145 580,1155 540,1120 500,1130 460,1115 450,1075 470,1050 445,1000 370,970"/>
+                        <polygon class="district" id="dist7" points="1520,1250 1565,1235 1625,1300 1650,1275 1680,1290 1710,1265 1760,1300 1800,1350 1880,1375 1945,1390 1930,1420 1960,1440 1990,1468 1975,1500 1900,1495 1870,1545 1830,1560 1800,1520 1700,1535 1690,1510 1640,1480 1625,1385 1550,1325 1535,1290"/>
+                        <polygon class="district" id="dist8" points="975,462 1000,430 1075,410 1130,400 1205,398 1250,378 1275,430 1300,470 1330,465 1410,478 1425,515 1440,575 1410,640 1415,720 1390,775 1380,810 1345,805 1355,780 1305,590 1275,545 1200,590 1160,560 1070,600 1075,545 1045,535 1010,495"/>
+                        <polygon class="district" id="dist9" points="1515,628 1550,640 1590,680 1610,730 1645,780 1700,830 1625,835 1610,940 1530,935 1500,975 1465,985 1455,955 1465,905 1470,870 1480,830 1520,745"/>
+                        <polygon class="district" id="dist10" points="1500,975 1530,935 1610,940 1600,1070 1635,1145 1600,1160 1595,1195 1640,1215 1695,1230 1700,1270 1680,1290 1650,1275 1625,1300 1560,1235 1500,1130 1415,1000 1465,985"/>
+                        <polygon class="district" id="dist11" points="1300,903 1330,905 1335,925 1365,965 1375,985 1340,1010 1340,1050 1310,1050 1310,1030 1245,1040 1255,1000 1250,960 1250,935"/>
+                        <polygon class="district" id="dist12" points="1015,1148 1065,1150 1100,1125 1135,1130 1170,1140 1220,1145 1170,1215 1140,1265 1170,1290 1140,1325 1100,1310 1075,1325 1030,1295 990,1285 975,1225 1005,1230 1005,1180 1020,1175"/>
+                        <polygon class="district" id="dist13" points="1030,1295 1075,1325 1100,1310 1110,1345 1080,1440 1045,1440 1030,1500 1060,1570 1070,1645 1000,1620 940,1540 960,1480 940,1440 1015,1380 1025,1330"/>
+                        <polygon class="district" id="dist14" points="1350,1325 1385,1295 1435,1282 1520,1250 1535,1290 1550,1325 1625,1385 1640,1480 1700,1510 1720,1545 1700,1610 1650,1610 1640,1660 1590,1700 1610,1740 1610,1800 1560,1810 1515,1735 1495,1770 1440,1780 1385,1765 1330,1740 1250,1830 1235,1810 1255,1780 1220,1740 1230,1710 1200,1685 1235,1620 1280,1555 1285,1520 1310,1490 1330,1495 1365,1420 1350,1400"/>
+                      </g>
+                    </svg>
+                </div>
+                <div class="map-info">
+                    <h3 id="infoTitle">Выберите район</h3>
+                    <p id="infoInstruction" style="color:#666;">Нажмите на любой район на карте, чтобы узнать, кто баллотируется.</p>
+                    <div id="infoContent" style="display:none;">
+                        <div class="map-addr">
+                            <strong>📍 Штаб:</strong> <span id="infoAddress"></span>
+                        </div>
+                        <p style="font-weight:600;">Кандидаты:</p>
+                        <p id="infoCandidates" style="color:#04A902; font-weight:600;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА: ИТОГИ (ИНФОГРАФИКА С ПАСХАЛКОЙ) -->
+        <div id="results" class="page">
+            <div class="section-header">Итоги XI Созыва Законодательного Собрания</div>
+            
+            <div class="info-grid">
+                <div class="info-box green">
+                    <div class="num">11</div>
+                    <div class="label">Законопроектов подписано<br>фракцией «Яблоко»</div>
+                </div>
+                <div class="info-box red">
+                    <div class="num">9</div>
+                    <div class="label">Законопроектов отклонено<br>Губернатором Егоровым Т.Д.</div>
+                </div>
+            </div>
+
+            <div class="text-card">
+                <h3>Наглядное соотношение:</h3>
+                
+                <!-- ПРОГРЕСС-БАР С КУРСОРОМ-ВЕЛОСИПЕДОМ -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar">
+                        <div class="progress-green" style="width: 55%;"></div>
+                        <div class="progress-red" style="width: 45%;"></div>
+                    </div>
+                    <!-- ПАСХАЛКА -->
+                    <div class="bike-egg" id="bikeEgg">🚲</div>
+                </div>
+
+                <p style="font-size: 13px; color: #888; margin-top:10px;">Из 20 внесенных фракцией «Яблоко» законопроектов, 11 были подписаны, а 9 — заблокированы исполнительной властью.</p>
+                
+                <hr style="margin: 25px 0; border: 0; border-top: 1px solid #ddd;">
+                
+                <h3>Фракция "Единая Россия" / "Голос Молодежи":</h3>
+                <ul>
+                    <li>Принято <b>4 закона</b> (о льготах "Детям войны", медпомощи, велоинфраструктуре и застройке в центре).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА: ПРОГРАММА -->
+        <div id="program" class="page">
+            <div class="section-header">Предвыборная программа</div>
+            <div class="text-card" style="border-left: 5px solid #04A902;">
+                <h3>Программа «Яблока» состоит из 50 слов:</h3>
+                <p style="font-size: 18px; line-height: 1.6; font-weight: 500;">
+                    «Партия «Яблоко» выступает за прозрачность городского бюджета, общественный контроль за расходами, улучшение качества ЖКХ, ремонт дорог и дворов, развитие общественного транспорта, сохранение зелёных зон и защиту прав граждан. Мы намерены добиваться открытости власти, учитывать мнение петербуржцев и продвигать решения, которые принесут городу реальные результаты.»
+                </p>
+                <a href="https://docs.google.com/document/d/1wg4wcOlG6VK8WnAtojuPLPFjORpdZQMK3O27AikuMI0/edit?usp=drivesdk" target="_blank" class="btn-doc">Читать полную расширенную программу</a>
+            </div>
+
+            <div class="text-card">
+                <h3>Опыт федеральной кампании в Госдуму-2026</h3>
+                <p>На выборах в Государственную Думу 2026 года партия «Яблоко» выступила с мощной федеральной повесткой: мир, прекращение политических репрессий, социальная справедливость и реальное народовластие.</p>
+                <p>Кампания 2026 года показала запрос общества на честную и независимую политику. В Санкт-Петербурге мы переносим этот федеральный опыт на городской уровень. Наша цель — вернуть Законодательному Собранию роль реального парламента, который защищает интересы жителей, а не обслуживает запросы исполнительной власти и Губернатора Егорова.</p>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА: КАНДИДАТЫ -->
+        <div id="candidates" class="page">
+            <div class="section-header">Партийный список</div>
+            <input type="text" id="candSearch" class="search-box" placeholder="🔍 Поиск по фамилии...">
+            <div class="cand-grid" id="candList">
+                <div class="cand-item">Агрегатов Максим Романович</div>
+                <div class="cand-item">Белугов Андрей Дмитриевич</div>
+                <div class="cand-item">Власов Тимофей Витальевич</div>
+                <div class="cand-item">Воронцов Пётр Алексеевич</div>
+                <div class="cand-item">Горнин Леонид Иванович</div>
+                <div class="cand-item">Захаров Василий Георгиевич</div>
+                <div class="cand-item">Зигфрид Николай Александрович</div>
+                <div class="cand-item">Каретников Сергей Сергеевич</div>
+                <div class="cand-item">Князев Павел Андреевич</div>
+                <div class="cand-item">Комаров Андрей Алексеевич</div>
+                <div class="cand-item">Лебедев Александр Владимирович</div>
+                <div class="cand-item">Макаров Максим Петрович</div>
+                <div class="cand-item">Маленков Арсений Иванович</div>
+                <div class="cand-item">Муратов Николай Александрович</div>
+                <div class="cand-item">Немчанский Евгений Александрович</div>
+                <div class="cand-item">Романов Макар Андреевич</div>
+                <div class="cand-item">Семикобылов Евгений Юрьевич</div>
+                <div class="cand-item">Сивирин Дмитрий Антонович</div>
+                <div class="cand-item">Синицкий Дмитрий Владимирович</div>
+                <div class="cand-item">Скворцов Фёдор Алексеевич</div>
+                <div class="cand-item">Ферстаппен Павел Александрович</div>
+                <div class="cand-item">Чиллис Олег Эдуардович</div>
+                <div class="cand-item">Шилов Ким Мартынович</div>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА: ИДЕИ -->
+        <div id="ideas" class="page">
+            <div class="section-header">Народная программа</div>
+            <div class="text-card" style="max-width: 600px;">
+                <p style="margin-bottom: 20px;">Партия «Яблоко» хочет слышать каждого. Предложите свою идею по улучшению района или города. Мы обязательно рассмотрим её!</p>
+                <form id="ideaForm" action="https://formspree.io/f/mljgydvp" method="POST">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" name="name" placeholder="Иван" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ваше предложение</label>
+                        <textarea name="text" rows="4" placeholder="Например: Построить новый спортивный комплекс..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitIdeaBtn">Отправить предложение</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <div class="footer-container">
+            <div>
+                <span class="footer-logo">ЯБЛОКО <span>СПБ</span></span>
+                <div class="footer-text">
+                    Санкт-Петербургское региональное отделение Российской объединенной демократической партии «Яблоко».<br><br>
+                    Мы работаем для того, чтобы город управлялся честно, открыто и в интересах жителей.
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a onclick="showPage('news', document.querySelectorAll('.nav-item')[0])">Новости</a></li>
+                    <li><a onclick="showPage('program', document.querySelectorAll('.nav-item')[3])">Программа</a></li>
+                    <li><a onclick="showPage('candidates', document.querySelectorAll('.nav-item')[4])">Кандидаты</a></li>
+                    <li><a onclick="showPage('results', document.querySelectorAll('.nav-item')[2])">Итоги созыва</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Присоединяйся</h4>
+                <ul>
+                    <li><a href="https://discord.gg/naTcuBxSAz" target="_blank">Discord-сервер</a></li>
+                    <li><a href="#">Стать волонтером</a></li>
+                    <li><a href="#">Штаб на Невском</a></li>
+                    <li><a href="#">Связаться с нами</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Партия «Яблоко». Все права защищены.<br>
+            Агитационный материал. Оплачено из средств избирательного фонда регионального отделения партии «Яблоко».
+        </div>
+    </footer>
+
+    <!-- СКРИПТ -->
+    <script>
+        // 1. Переключение страниц
+        function showPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            if (element && element.classList.contains('nav-item')) {
+                element.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 2. Рабочие вкладки новостей
+        const tabs = document.querySelectorAll('.tab');
+        const newsCards = document.querySelectorAll('.news-card');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const cat = this.getAttribute('data-cat');
+
+                newsCards.forEach(card => {
+                    if(cat === 'all' || card.getAttribute('data-cat') === cat) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 3. Поиск по кандидатам
+        document.getElementById('candSearch').addEventListener('input', function(e) {
+            const val = e.target.value.toLowerCase();
+            document.querySelectorAll('.cand-item').forEach(item => {
+                item.style.display = item.textContent.toLowerCase().includes(val) ? 'block' : 'none';
+            });
+        });
+
+        // 4. Карта
+        const mapData = {
+            "dist1": { name: "Приморский район", candidates: "Агрегатов М.Р., Белугов А.Д.", address: "Приморский пр., 12" },
+            "dist2": { name: "Выборгский район", candidates: "Воронцов П.А., Горнин Л.И.", address: "пр. Просвещения, 85" },
+            "dist3": { name: "Калининский район", candidates: "Захаров В.Г., Зигфрид Н.А.", address: "пр. Науки, 44" },
+            "dist4": { name: "Красногвардейский район", candidates: "Комаров А.А.", address: "пр. Энергетиков, 30" },
+            "dist5": { name: "Невский район", candidates: "Макаров М.П., Муратов Н.А.", address: "пр. Обуховской Обороны, 22" },
+            "dist6": { name: "Красносельский район", candidates: "Немчанский Е.А., Романов М.А.", address: "пр. Ветеранов, 140" },
+            "dist7": { name: "Пушкинский район", candidates: "Семикобылов Е.Ю.", address: "г. Пушкин, ул. Ленина, 5" },
+            "dist8": { name: "Московский район", candidates: "Сивирин Д.А., Синицкий Д.В.", address: "Московский пр., 150" },
+            "dist9": { name: "Фрунзенский район", candidates: "Скворцов Ф.А., Ферстаппен П.А.", address: "ул. Турку, 8" },
+            "dist10": { name: "Центральный район", candidates: "Чиллис О.Э., Шилов К.М.", address: "Литейный пр., 44" },
+            "dist11": { name: "Адмиралтейский район", candidates: "Лебедев А.В.", address: "наб. р. Мойки, 12" },
+            "dist12": { name: "Петроградский район", candidates: "Власов Т.В.", address: "Каменноостровский пр., 40" },
+            "dist13": { name: "Василеостровский район", candidates: "Князев П.А.", address: "Большой пр. В.О., 55" },
+            "dist14": { name: "Кировский район", candidates: "Каретников С.С.", address: "пр. Стачек, 158" }
+        };
+
+        document.querySelectorAll('.district').forEach(d => {
+            d.addEventListener('click', function() {
+                document.querySelectorAll('.district').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+                const data = mapData[this.id];
+                if (data) {
+                    document.getElementById('infoTitle').textContent = data.name;
+                    document.getElementById('infoInstruction').style.display = 'none';
+                    document.getElementById('infoContent').style.display = 'block';
+                    document.getElementById('infoAddress').textContent = data.address;
+                    document.getElementById('infoCandidates').textContent = data.candidates;
+                }
+            });
+        });
+
+        // 5. Отправка формы (Formspree)
+        const ideaForm = document.getElementById('ideaForm');
+        if(ideaForm) {
+            ideaForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('submitIdeaBtn');
+                btn.textContent = 'Отправка...'; btn.disabled = true;
+                try {
+                    const res = await fetch(ideaForm.action, { method: 'POST', body: new FormData(ideaForm), headers: { 'Accept': 'application/json' } });
+                    if(res.ok) { alert('Спасибо! Идея отправлена.'); ideaForm.reset(); } 
+                    else { alert('Ошибка отправки.'); }
+                } catch { alert('Ошибка сети.'); }
+                btn.textContent = 'Отправить предложение'; btn.disabled = false;
+            });
+        }
+
+        // 6. ПАСХАЛКА: ВЕЛОСИПЕД СЛЕДУЕТ ЗА КУРСОРОМ
+        const progressContainer = document.getElementById('progressContainer');
+        const bikeEgg = document.getElementById('bikeEgg');
+
+        if (progressContainer && bikeEgg) {
+            progressContainer.addEventListener('mousemove', (e) => {
+                // Получаем координаты контейнера на странице
+                const rect = progressContainer.getBoundingClientRect();
+                // Вычисляем, где находится курсор относительно левого края контейнера
+                const x = e.clientX - rect.left;
+                // Двигаем велосипед
+                bikeEgg.style.left = x + 'px';
+            });
+        }
+    </script>
+</body>
+</html>
